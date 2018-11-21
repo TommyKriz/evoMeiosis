@@ -49,7 +49,7 @@ public class TUIOHelper {
 			return INVALID;
 		}
 		TuioCursor tc = tuioClient.getTuioCursorList().get(trackID);
-		ArrayList pointList = tc.getPath();
+		ArrayList<TuioPoint> pointList = tc.getPath();
 		if (pointList == null || pointList.size() <= pointID) {
 			return INVALID;
 		}
@@ -63,7 +63,7 @@ public class TUIOHelper {
 			return INVALID;
 		}
 		TuioCursor tc = tuioClient.getTuioCursorList().get(trackID);
-		ArrayList pointList = tc.getPath();
+		ArrayList<TuioPoint> pointList = tc.getPath();
 		if (pointList == null || pointList.size() <= pointID) {
 			return INVALID;
 		}
@@ -98,7 +98,7 @@ public class TUIOHelper {
 
 	int GetNumFeet(int trackID) {
 		int nFeet = 0;
-		ArrayList tuioObjectList = tuioClient.getTuioObjectList();
+		ArrayList<TuioObject> tuioObjectList = tuioClient.getTuioObjectList();
 		for (int i = 0; i < tuioObjectList.size(); i++) {
 			TuioObject tobj = (TuioObject) tuioObjectList.get(i);
 			if (tobj.getSymbolID() == trackID) {
@@ -110,7 +110,7 @@ public class TUIOHelper {
 
 	int GetFootX(int trackID, int footID) {
 		int nFootCnt = 0;
-		ArrayList tuioObjectList = tuioClient.getTuioObjectList();
+		ArrayList<TuioObject> tuioObjectList = tuioClient.getTuioObjectList();
 		for (int i = 0; i < tuioObjectList.size(); i++) {
 			TuioObject tobj = (TuioObject) tuioObjectList.get(i);
 			if (tobj.getSymbolID() == trackID) {
@@ -125,7 +125,7 @@ public class TUIOHelper {
 
 	int GetFootY(int trackID, int footID) {
 		int nFootCnt = 0;
-		ArrayList tuioObjectList = tuioClient.getTuioObjectList();
+		ArrayList<TuioObject> tuioObjectList = tuioClient.getTuioObjectList();
 		for (int i = 0; i < tuioObjectList.size(); i++) {
 			TuioObject tobj = (TuioObject) tuioObjectList.get(i);
 			if (tobj.getSymbolID() == trackID) {

@@ -1,7 +1,7 @@
 package evoMeiosis;
 
 import processing.core.PApplet;
-import processing.core.PVector;
+import tuio.DeepSpaceTUIOHelper;
 
 public class DeepSpaceProcessingSketch extends PApplet {
 
@@ -13,9 +13,9 @@ public class DeepSpaceProcessingSketch extends PApplet {
 
 	private static final int scaleFactor = 4;
 
-	int windowWidth = DEEP_SPACE_WIDTH / scaleFactor;
-	int windowHeight = DEEP_SPACE_HEIGHT / scaleFactor;
-	int wallHeight = DEEP_SPACE_WALL_HEIGHT / scaleFactor;
+	final int windowWidth = DEEP_SPACE_WIDTH / scaleFactor;
+	final int windowHeight = DEEP_SPACE_HEIGHT / scaleFactor;
+	final int wallHeight = DEEP_SPACE_WALL_HEIGHT / scaleFactor;
 
 	EvoMeiosis evoMeiosis;
 
@@ -27,22 +27,24 @@ public class DeepSpaceProcessingSketch extends PApplet {
 	@Override
 	public void setup() {
 		stroke(255);
-		evoMeiosis = new EvoMeiosis(this, wallHeight);
 		// frameRate(30);
+		evoMeiosis = new EvoMeiosis(this, windowWidth, windowHeight
+				- wallHeight, new DeepSpaceTUIOHelper(this, wallHeight));
+
 	}
 
 	@Override
 	public void draw() {
-		float alpha = 30;
-		// background(10, alpha);
-
-		// set upper half of window (=wall projection) bluish
-		fill(70, 100, 150, alpha);
-		rect(0, 0, windowWidth, wallHeight);
-
-		// set lower half of window (=floor projection) reddish
-		fill(150, 100, 50, alpha);
-		rect(0, wallHeight, windowWidth, windowHeight);
+		// float alpha = 30;
+		// // background(10, alpha);
+		//
+		// // set upper half of window (=wall projection) bluish
+		// fill(70, 100, 150, alpha);
+		// rect(0, 0, windowWidth, windowHeight);
+		//
+		// // set lower half of window (=floor projection) reddish
+		// fill(250, 100, 50, alpha);
+		// rect(0, wallHeight, windowWidth, wallHeight);
 
 		evoMeiosis.update();
 	}

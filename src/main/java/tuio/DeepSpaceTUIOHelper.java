@@ -42,10 +42,11 @@ public class DeepSpaceTUIOHelper {
 			return INVALID;
 		}
 		TuioCursor tc = tuioClient.getTuioCursorList().get(trackID);
-		return tc.getScreenY(parentHeight - _wallHeight) + _wallHeight;
+		return tc.getScreenY(parentHeight - _wallHeight);// + _wallHeight;
+		// TODO: genau anschaun
 	}
 
-	public ArrayList<PVector> getPlayers() {
+	public ArrayList<PVector> getPlayerPositions() {
 		players.clear();
 		for (int trackID = 0; trackID < GetNumTracks(); trackID++) {
 			players.add(new PVector(GetX(trackID), GetY(trackID)));

@@ -26,7 +26,7 @@ public class Agent {
 	float amplitude;
 	float smoothing;
 
-	void setup() {
+	void setup(PApplet parent) {
 
 		canvas.size(3840, 1440);
 		background(0);
@@ -34,12 +34,12 @@ public class Agent {
 		xPos = 0;
 		yPos = 0;
 
-		amp = new Amplitude(this);
+		amp = new Amplitude(parent);
 
 		// Create an Input stream which is routed into the Amplitude analyzer
-		fft = new processing.sound.FFT(this, bands);
+		fft = new processing.sound.FFT(parent, bands);
 
-		in = new AudioIn(this, 0);
+		in = new AudioIn(parent, 0);
 
 		// patch Audio to amplitude
 		amp.input(in);
@@ -72,13 +72,13 @@ public class Agent {
 		amplitude = agentAmplitude;
 	}
 
-	void draw() {
+	void draw(PGraphics canvas) {
 		canvas.background(255);
 		float[] spectrumAnalyzed = fft.analyze();
 
-		noStroke();
+		canvas.noStroke();
 		setPosition(1, 2);
-		translate(xPos, yPos); // translate(width / 3, height / 2);
+		canvas.translate(xPos, yPos); // translate(width / 3, height / 2);
 		beginShape();
 		for (int i = 10; i < spectrumAnalyzed.length; i++) {
 

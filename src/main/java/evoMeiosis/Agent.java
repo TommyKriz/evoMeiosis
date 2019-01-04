@@ -28,7 +28,7 @@ public class Agent {
 
 	void setup(PApplet parent) {
 
-		canvas.size(3840, 1440);
+		size(3840, 1440);
 		background(0);
 
 		xPos = 0;
@@ -73,13 +73,13 @@ public class Agent {
 	}
 
 	void draw(PGraphics canvas) {
+		canvas.beginDraw();
 		canvas.background(255);
 		float[] spectrumAnalyzed = fft.analyze();
 
 		canvas.noStroke();
-		setPosition(1, 2);
-		canvas.translate(xPos, yPos); // translate(width / 3, height / 2);
-		beginShape();
+		setPosition(1000, 500);
+		canvas.beginShape();
 		for (int i = 10; i < spectrumAnalyzed.length; i++) {
 
 			fftSmooth[i] *= smoothing;
@@ -90,18 +90,18 @@ public class Agent {
 			float currentAmp = fftSmooth[i];
 			float angle = map(i, 0, spectrumAnalyzed.length, 0, 180);
 			float r = map(currentAmp * 1000, 0, 256, 120, 240);
-			fill(i, 255, 0);
+			canvas.fill(i, 255, 0);
 			// strokeWeight(0.02 * i);
 			float x = r * cos(angle);
 			float y = r * sin(angle);
 
-			vertex(x, y);
+			canvas.vertex(x, y);
 			// ellipse(100, 100, ampt, ampt);
 			// The result of the FFT is normalized
 			// draw the line for frequency band i scaling it up by 5 to get more amplitude.
 			// line( i*10, height, i*10, height - spectrum[i]*height*30);
 
 		}
-		endShape();
+		canvas.endShape();
 	}
 }

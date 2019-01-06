@@ -15,8 +15,8 @@ public class Audio {
 		treeCreation = new SoundFile(parent, "treecreation_sound.wav");
 		agentSpawn = new SoundFile(parent, "agentspawn.wav");
 		BGphase1 = new SoundFile(parent, "BGStage1.aiff");
-		BGphase2 = new SoundFile(parent, "BGStage2.wav");
-		BGphase3 = new SoundFile(parent, "BGStage3.wav");
+		BGphase2 = new SoundFile(parent, "BGStage2_96k.wav");
+		BGphase3 = new SoundFile(parent, "BGStage3_96k.wav");
 		
 	}
 	

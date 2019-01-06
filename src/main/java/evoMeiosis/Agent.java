@@ -1,6 +1,7 @@
 package evoMeiosis;
 
 import processing.core.PApplet;
+
 import processing.core.PGraphics;
 import processing.core.PVector;
 import tuio.DeepSpaceTUIOHelper;
@@ -24,12 +25,17 @@ public class Agent {
 	float yPos;
 	float frequency;
 	float amplitude;
-	float smoothing;
 
+	float smoothing = 0;
+	float[] fftSmooth;
+
+	SoundFile file;
+	int bands = 128;
+	
 	void setup(PApplet parent) {
 
-		size(3840, 1440);
-		background(0);
+		parent.size(3840, 1440);
+		parent.background(0);
 
 		xPos = 0;
 		yPos = 0;
@@ -39,6 +45,7 @@ public class Agent {
 		// Create an Input stream which is routed into the Amplitude analyzer
 		fft = new processing.sound.FFT(parent, bands);
 
+		// AudioIn should be the frequency of the specific agent
 		in = new AudioIn(parent, 0);
 
 		// patch Audio to amplitude
@@ -48,7 +55,7 @@ public class Agent {
 
 		fft.input(in);
 
-		smoothing = 0.92;
+		smoothing = 0.92f;
 		fftSmooth = new float[bands];
 	}
 
@@ -88,12 +95,12 @@ public class Agent {
 
 			// seeds werden je nach frequenz gezeichnet
 			float currentAmp = fftSmooth[i];
-			float angle = map(i, 0, spectrumAnalyzed.length, 0, 180);
-			float r = map(currentAmp * 1000, 0, 256, 120, 240);
+			float angle = i * 180 /  spectrumAnalyzed.length;
+			float r = 120 + (currentAmp * 1000) * (240 - 120) / (256);
 			canvas.fill(i, 255, 0);
 			// strokeWeight(0.02 * i);
-			float x = r * cos(angle);
-			float y = r * sin(angle);
+			float x = (float)(r * java.lang.Math.cos(angle));
+			float y = (float)(r * java.lang.Math.sin(angle));
 
 			canvas.vertex(x, y);
 			// ellipse(100, 100, ampt, ampt);

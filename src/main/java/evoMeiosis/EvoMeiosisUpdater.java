@@ -5,23 +5,17 @@ import java.util.ArrayList;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
-import tuio.DeepSpaceTUIOHelper;
+import deepSpace.tuio.DeepSpaceTUIOHelper;
 
 public class EvoMeiosisUpdater {
-
-	private final int fieldWidth;
-
-	private final int fieldHeight;
 
 	private final DeepSpaceTUIOHelper tuioClient;
 
 	private ArrayList<PVector> playersPositions;
 
-	public EvoMeiosisUpdater(int fieldWidth, int fieldHeight,
-			DeepSpaceTUIOHelper tuioClient) {
-		this.fieldWidth = fieldWidth;
-		this.fieldHeight = fieldHeight;
-		this.tuioClient = tuioClient;
+	public EvoMeiosisUpdater(
+			deepSpace.tuio.DeepSpaceTUIOHelper deepSpaceTUIOHelper) {
+		this.tuioClient = deepSpaceTUIOHelper;
 	}
 
 	public void update() {
@@ -44,7 +38,7 @@ public class EvoMeiosisUpdater {
 	public void paintTrails(PGraphics canvas) {
 		canvas.beginDraw();
 		canvas.fill(250, 0, 0, 80);
-		canvas.rect(0, 0, fieldWidth, fieldHeight);
+		canvas.rect(0, 0, canvas.width, canvas.height);
 		canvas.endDraw();
 	}
 

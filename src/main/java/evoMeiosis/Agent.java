@@ -1,20 +1,11 @@
 package evoMeiosis;
 
 import processing.core.PApplet;
-
 import processing.core.PGraphics;
-import processing.core.PVector;
-import tuio.DeepSpaceTUIOHelper;
-
-import ddf.minim.*;
-import ddf.minim.analysis.*;
-import ddf.minim.effects.*;
-import ddf.minim.signals.*;
-import ddf.minim.spi.*;
-import ddf.minim.ugens.*;
-
 // need processing sound lib
-import processing.sound.*;
+import processing.sound.Amplitude;
+import processing.sound.AudioIn;
+import processing.sound.SoundFile;
 
 public class Agent {
 
@@ -31,7 +22,7 @@ public class Agent {
 
 	SoundFile file;
 	int bands = 128;
-	
+
 	void setup(PApplet parent) {
 
 		parent.size(3840, 1440);
@@ -70,7 +61,7 @@ public class Agent {
 			yPos = 0;
 		yPos++;
 	}
-	
+
 	void getFrequency(float agentFrequency) {
 		frequency = agentFrequency;
 	}
@@ -95,17 +86,18 @@ public class Agent {
 
 			// seeds werden je nach frequenz gezeichnet
 			float currentAmp = fftSmooth[i];
-			float angle = i * 180 /  spectrumAnalyzed.length;
+			float angle = i * 180 / spectrumAnalyzed.length;
 			float r = 120 + (currentAmp * 1000) * (240 - 120) / (256);
 			canvas.fill(i, 255, 0);
 			// strokeWeight(0.02 * i);
-			float x = (float)(r * java.lang.Math.cos(angle));
-			float y = (float)(r * java.lang.Math.sin(angle));
+			float x = (float) (r * java.lang.Math.cos(angle));
+			float y = (float) (r * java.lang.Math.sin(angle));
 
 			canvas.vertex(x, y);
 			// ellipse(100, 100, ampt, ampt);
 			// The result of the FFT is normalized
-			// draw the line for frequency band i scaling it up by 5 to get more amplitude.
+			// draw the line for frequency band i scaling it up by 5 to get more
+			// amplitude.
 			// line( i*10, height, i*10, height - spectrum[i]*height*30);
 
 		}

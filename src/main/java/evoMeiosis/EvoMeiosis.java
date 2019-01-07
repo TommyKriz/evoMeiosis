@@ -2,7 +2,8 @@ package evoMeiosis;
 
 import processing.core.PApplet;
 import processing.core.PGraphics;
-import tuio.DeepSpaceTUIOHelper;
+import deepSpace.DeepSpaceConstants;
+import deepSpace.tuio.DeepSpaceTUIOHelper;
 
 public class EvoMeiosis {
 
@@ -12,19 +13,21 @@ public class EvoMeiosis {
 
 	private EvoMeiosisUpdater evoMeiosis;
 
-	public EvoMeiosis(PApplet parent, int fieldWidth, int fieldHeight,
-			DeepSpaceTUIOHelper deepSpaceTUIOHelper) {
+	public EvoMeiosis(PApplet parent, DeepSpaceTUIOHelper deepSpaceTUIOHelper) {
 		this.parent = parent;
-		initCanvases(fieldWidth, fieldHeight);
-		evoMeiosis = new EvoMeiosisUpdater(fieldWidth, fieldHeight,
-				deepSpaceTUIOHelper);
+		initCanvases();
+		evoMeiosis = new EvoMeiosisUpdater(deepSpaceTUIOHelper);
 
 	}
 
-	private void initCanvases(int fieldWidth, int fieldHeight) {
-		pgTrails = parent.createGraphics(fieldWidth, fieldHeight);
-		pgPlayerAndParticles = parent.createGraphics(fieldWidth, fieldHeight);
-		pgTrees = parent.createGraphics(fieldWidth, fieldHeight);
+	private void initCanvases() {
+		pgTrails = parent.createGraphics(DeepSpaceConstants.WINDOW_WIDTH,
+				DeepSpaceConstants.FLOOR_HEIGHT);
+		pgPlayerAndParticles = parent.createGraphics(
+				DeepSpaceConstants.WINDOW_WIDTH,
+				DeepSpaceConstants.FLOOR_HEIGHT);
+		pgTrees = parent.createGraphics(DeepSpaceConstants.WINDOW_WIDTH,
+				DeepSpaceConstants.FLOOR_HEIGHT);
 	}
 
 	public void update() {
@@ -42,9 +45,9 @@ public class EvoMeiosis {
 	}
 
 	private void blendPGraphics() {
-		parent.image(pgTrails, 0, 0);
-		parent.image(pgTrees, 0, 0);
-		parent.image(pgPlayerAndParticles, 0, 0);
+		parent.image(pgTrails, 0, DeepSpaceConstants.WALL_HEIGHT);
+		parent.image(pgTrees, 0, DeepSpaceConstants.WALL_HEIGHT);
+		parent.image(pgPlayerAndParticles, 0, DeepSpaceConstants.WALL_HEIGHT);
 	}
 
 }

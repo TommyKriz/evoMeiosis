@@ -1,4 +1,4 @@
-package evoMeiosis;
+package evoMeiosis.audio;
 
 import processing.core.PApplet;
 import processing.core.PGraphics;
@@ -23,10 +23,7 @@ public class Agent {
 	SoundFile file;
 	int bands = 128;
 
-	void setup(PApplet parent) {
-
-		parent.size(3840, 1440);
-		parent.background(0);
+	void setup(final PApplet parent) {
 
 		xPos = 0;
 		yPos = 0;

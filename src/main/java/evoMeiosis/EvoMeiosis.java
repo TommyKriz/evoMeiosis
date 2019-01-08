@@ -4,6 +4,7 @@ import processing.core.PApplet;
 import processing.core.PGraphics;
 import deepSpace.DeepSpaceConstants;
 import deepSpace.tuio.DeepSpaceTUIOHelper;
+import evoMeiosis.audio.AudioTest;
 
 public class EvoMeiosis {
 
@@ -16,6 +17,8 @@ public class EvoMeiosis {
 	public EvoMeiosis(PApplet parent, DeepSpaceTUIOHelper deepSpaceTUIOHelper) {
 		this.parent = parent;
 		initCanvases();
+		// TODO: remove, this is for demo purposes
+		new AudioTest(parent).playSound();
 		evoMeiosis = new EvoMeiosisUpdater(deepSpaceTUIOHelper);
 
 	}

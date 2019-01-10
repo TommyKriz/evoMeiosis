@@ -12,9 +12,6 @@ public class Audio {
 	SoundFile BGphase3;
 
 	void setup(PApplet parent) {
-		/**
-		 * These files must be placed in the audio folder !
-		 */
 		treeCreation = new SoundFile(parent, "treecreation_sound.wav");
 		agentSpawn = new SoundFile(parent, "agentspawn.wav");
 		BGphase1 = new SoundFile(parent, "BGStage1.aiff");
@@ -61,6 +58,7 @@ public class Audio {
 			}
 			BGphase1.stop();
 			BGphase2.loop();
+			return;
 		}
 		if (phase == 3) {
 			while (BGphase2.percent() != 100) {
@@ -69,6 +67,7 @@ public class Audio {
 			}
 			BGphase2.stop();
 			BGphase3.loop();
+			return;
 		}
 	}
 

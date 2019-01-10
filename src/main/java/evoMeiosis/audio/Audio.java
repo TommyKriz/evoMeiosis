@@ -10,6 +10,8 @@ public class Audio {
 	SoundFile BGphase1;
 	SoundFile BGphase2;
 	SoundFile BGphase3;
+	int phase;
+	int amountSeeds;
 
 	void setup(PApplet parent) {
 		treeCreation = new SoundFile(parent, "treecreation_sound.wav");
@@ -17,7 +19,7 @@ public class Audio {
 		BGphase1 = new SoundFile(parent, "BGStage1.aiff");
 		BGphase2 = new SoundFile(parent, "BGStage2_96k.wav");
 		BGphase3 = new SoundFile(parent, "BGStage3_96k.wav");
-
+		phase = 1;
 	}
 
 	void newTreeCreated() {
@@ -69,6 +71,13 @@ public class Audio {
 			BGphase3.loop();
 			return;
 		}
+	}
+	
+	public void playSound() {
+		if(amountSeeds < 10) { phase = 1; }
+		if(amountSeeds >= 10 && amountSeeds < 20) { phase = 2;}
+		if(amountSeeds >= 20) { phase = 3;}
+		backgroundJingle(phase);
 	}
 
 }

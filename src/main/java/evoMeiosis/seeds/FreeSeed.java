@@ -59,7 +59,7 @@ public class FreeSeed {
 	}
 
 	void destroy() {
-		freeSeedFieldParticle[x + y * fieldWidth] = false;
+		freeSeedFieldParticle[x + y * DeepSpaceConstants.WINDOW_WIDTH] = false;
 		freeSeeds.remove(this);
 	}
 

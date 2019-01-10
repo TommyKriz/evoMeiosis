@@ -13,11 +13,11 @@ public class Attractor {
 		this.radius = radius;
 	}
 
-	float getXAttraction(float x) {
+	public float getXAttraction(float x) {
 		return (xOrig - x) * intensity;
 	}
 
-	float getYAttraction(float y) {
+	public float getYAttraction(float y) {
 		return (yOrig - y) * intensity;
 	}
 

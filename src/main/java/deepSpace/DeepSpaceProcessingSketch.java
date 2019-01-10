@@ -15,19 +15,13 @@ public class DeepSpaceProcessingSketch extends PApplet {
 
 	@Override
 	public void setup() {
-		stroke(255);
 		// frameRate(30);
-		evoMeiosis = new EvoMeiosis(this, new DeepSpaceTUIOHelper(this));
+		evoMeiosis = new EvoMeiosis(this);
 
 	}
 
 	@Override
 	public void draw() {
-
-		fill(0, 0, 0, 30);
-		rect(0, 0, DeepSpaceConstants.WINDOW_WIDTH,
-				DeepSpaceConstants.WALL_HEIGHT);
-
 		evoMeiosis.update();
 	}
 }

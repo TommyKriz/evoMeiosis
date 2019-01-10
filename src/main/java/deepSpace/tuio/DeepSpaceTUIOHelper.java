@@ -7,6 +7,7 @@ import processing.core.PVector;
 import TUIO.TuioCursor;
 import TUIO.TuioProcessing;
 import deepSpace.DeepSpaceConstants;
+import evoMeiosis.player.Player;
 
 public class DeepSpaceTUIOHelper {
 
@@ -14,7 +15,9 @@ public class DeepSpaceTUIOHelper {
 
 	private static final int INVALID = -1;
 
-	private ArrayList<PVector> players = new ArrayList<>();
+	private ArrayList<PVector> playerPositions = new ArrayList<>();
+
+	ArrayList<Player> players = new ArrayList<>();
 
 	public DeepSpaceTUIOHelper(final PApplet parent) {
 		tuioClient = new TuioProcessing(parent);
@@ -41,9 +44,17 @@ public class DeepSpaceTUIOHelper {
 	}
 
 	public ArrayList<PVector> getPlayerPositions() {
+		playerPositions.clear();
+		for (int trackID = 0; trackID < GetNumTracks(); trackID++) {
+			playerPositions.add(new PVector(GetX(trackID), GetY(trackID)));
+		}
+		return playerPositions;
+	}
+
+	public ArrayList<Player> getPlayers() {
 		players.clear();
 		for (int trackID = 0; trackID < GetNumTracks(); trackID++) {
-			players.add(new PVector(GetX(trackID), GetY(trackID)));
+			players.add(new Player(GetX(trackID), GetY(trackID), trackID));
 		}
 		return players;
 	}

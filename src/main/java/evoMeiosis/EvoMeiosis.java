@@ -4,22 +4,26 @@ import processing.core.PApplet;
 import processing.core.PGraphics;
 import deepSpace.DeepSpaceConstants;
 import deepSpace.tuio.DeepSpaceTUIOHelper;
+import evoMeiosis.audio.Agent;
 import evoMeiosis.audio.AudioTest;
 
 public class EvoMeiosis {
 
 	private PApplet parent;
 
-	private PGraphics pgTrails, pgPlayerAndParticles, pgTrees;
+	private PGraphics pgTrails, pgPlayerAndParticles, pgTrees, pgWall;
 
-	private EvoMeiosisUpdater evoMeiosis;
+	private EvoMeiosisEngine evoMeiosisEngine;
 
-	public EvoMeiosis(PApplet parent, DeepSpaceTUIOHelper deepSpaceTUIOHelper) {
+	private Agent agent;
+
+	public EvoMeiosis(PApplet parent) {
 		this.parent = parent;
 		initCanvases();
 		// TODO: remove, this is for demo purposes
 		new AudioTest(parent).playSound();
-		evoMeiosis = new EvoMeiosisUpdater(deepSpaceTUIOHelper);
+		agent = new Agent();
+		evoMeiosisEngine = new EvoMeiosisEngine(new DeepSpaceTUIOHelper(parent));
 
 	}
 
@@ -31,18 +35,22 @@ public class EvoMeiosis {
 				DeepSpaceConstants.FLOOR_HEIGHT);
 		pgTrees = parent.createGraphics(DeepSpaceConstants.WINDOW_WIDTH,
 				DeepSpaceConstants.FLOOR_HEIGHT);
+		pgWall = parent.createGraphics(DeepSpaceConstants.WINDOW_WIDTH,
+				DeepSpaceConstants.WALL_HEIGHT);
 	}
 
 	public void update() {
 
 		// logic
 
-		evoMeiosis.update();
+		evoMeiosisEngine.update();
 
 		// draw
 
-		evoMeiosis.paintPlayers(pgPlayerAndParticles);
-		evoMeiosis.paintTrails(pgTrails);
+		evoMeiosisEngine.paintPlayers(pgPlayerAndParticles);
+		evoMeiosisEngine.paintTrails(pgTrails);
+
+		// agent.draw(pgWall);
 
 		blendPGraphics();
 	}
@@ -51,6 +59,7 @@ public class EvoMeiosis {
 		parent.image(pgTrails, 0, DeepSpaceConstants.WALL_HEIGHT);
 		parent.image(pgTrees, 0, DeepSpaceConstants.WALL_HEIGHT);
 		parent.image(pgPlayerAndParticles, 0, DeepSpaceConstants.WALL_HEIGHT);
+		parent.image(pgWall, 0, 0);
 	}
 
 }

@@ -47,8 +47,22 @@ public class EvoMeiosis {
 
 		// draw
 
+		// parent.millis();
+
 		evoMeiosisEngine.paintPlayers(pgPlayerAndParticles);
 		evoMeiosisEngine.paintTrails(pgTrails);
+
+		/*
+		 * 
+		 * 
+		 * collectFreeSeeds();
+		 * 
+		 * // ------------------------------------------- renderFreeSeeds();
+		 * 
+		 * // --------------------------------------------- renderTrees();
+		 */
+
+		// parent.colorMode(PApplet.HSB, 255);
 
 		// agent.draw(pgWall);
 

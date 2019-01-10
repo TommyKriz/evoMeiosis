@@ -2,11 +2,11 @@ package evoMeiosis.trees;
 
 import java.util.ArrayList;
 
-import deepSpace.DeepSpaceConstants;
 import processing.core.PApplet;
 import processing.core.PGraphics;
+import processing.core.PVector;
+import deepSpace.DeepSpaceConstants;
 import evoMeiosis.EvoMeiosisConstants;
-import evoMeiosis.player.Player;
 
 public class TreeSystem {
 
@@ -76,29 +76,29 @@ public class TreeSystem {
 		return treeFieldColor[i][2] == c[2]; // <>//
 	}
 
-	public void checkForNewTree(ArrayList<Player> players) {
+	public void checkForNewTree(ArrayList<PVector> playerPositions) {
 
-		for (Player p1 : players) {
-			for (Player p2 : players) {
+		for (PVector p1 : playerPositions) {
+			for (PVector p2 : playerPositions) {
 
-				if (p1.id == p2.id) {
-					continue;
-				}
+				// if (p1.id == p2.id) {
+				// continue;
+				// }
 
-				if (distance(p1.x, players.get(0).yOrig, players.get(1).xOrig,
-						players.get(1).yOrig) < catchRadius) {
-					int mx = (players.get(0).xOrig + players.get(1).xOrig) / 2;
-					int my = (players.get(0).yOrig + players.get(1).yOrig) / 2;
+				if (distance(p1.x, p1.y, p2.x, p2.y) < EvoMeiosisConstants.PLAYER_CATCH_RADIUS) {
+					int mx = (int) ((p1.x + p2.x) / 2);
+					int my = (int) ((p1.y + p2.y) / 2);
 					// check if tree already exists in this area!
 					boolean treeAlreadyThere = false;
 					for (Tree t : trees) {
-						if (distance(mx, my, t.originX, t.originY) < newTreeRadius) {
+						if (distance(mx, my, t.originX, t.originY) < EvoMeiosisConstants.NEW_TREE_RADIUS) {
 							treeAlreadyThere = true;
 							break;
 						}
 					}
 					if (!treeAlreadyThere) {
 						trees.add(new Tree(mx, my));
+						growFundament(mx, my, 1);
 					}
 
 				}
@@ -109,6 +109,15 @@ public class TreeSystem {
 	}
 
 	// ---------------------------------------------------------------------------------------------------
+
+	private void growFundament(int originX, int originY, int size) {
+		for (int i = 0; i < size; i++) {
+			for (int j = 0; j < size; j++) {
+				setTreeColorField(originX + i - (size / 2), originY + j
+						- (size / 2), 255, 255, 255);
+			}
+		}
+	}
 
 	// helper methods----------------------------------------------------------
 	private double distance(float x1, float y1, float x2, float y2) {

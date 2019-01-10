@@ -10,4 +10,10 @@ public class EvoMeiosisConstants {
 
 	public static final int NEW_TREE_RADIUS = 100;
 
+	public static final float fmax = 2000;
+	public static final float fMin = 20;
+	public static final float ampMax = 3;
+	public static final float ampMin = 0.2f;
+	public static final float globalSpeed = 0.03f;
+
 }

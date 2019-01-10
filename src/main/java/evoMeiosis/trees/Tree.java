@@ -2,10 +2,11 @@ package evoMeiosis.trees;
 
 import java.util.ArrayList;
 
+import processing.core.PGraphics;
+import evoMeiosis.EvoMeiosisConstants;
 import evoMeiosis.logic.Attractor;
 import evoMeiosis.logic.FADtriple;
 import evoMeiosis.seeds.FreeSeed;
-import processing.core.PGraphics;
 
 public class Tree extends Attractor {
 	int originX, originY;
@@ -16,23 +17,13 @@ public class Tree extends Attractor {
 	int seedSpawnRate = 100;
 	int stuckCnt = 0;
 
-	Tree(int originPosX, int originPosY) {
-		super(originPosX, originPosY, treeRadius);
-		originX = originPosX;
-		originY = originPosY;
+	Tree(int mx, int my) {
+		super(mx, my, EvoMeiosisConstants.TREE_RADIUS);
+		originX = mx;
+		originY = my;
 		aggregatedGrowthRadius = 200;
 		// add seed at the middle
 		treeParticles = new ArrayList<TreeParticle>();
-		growFundament(1);
-	}
-
-	void growFundament(int size) {
-		for (int i = 0; i < size; i++) {
-			for (int j = 0; j < size; j++) {
-				setTreeColorField(originX + i - (size / 2), originY + j
-						- (size / 2), 255, 255, 255);
-			}
-		}
 	}
 
 	// add seeds and convert them to TreeParticles so they can be used to
@@ -49,28 +40,29 @@ public class Tree extends Attractor {
 		}
 	}
 
-	void spawnSeed(int x, int y) {
-
-		FreeSeed fs = new FreeSeed(0);
-		float a = 0, f = 0, d = 0;
-		for (TreeParticle t : treeParticles) {
-			for (FADtriple fad : t.FADs) {
-				a += fad.amplitude;
-				f += fad.frequency;
-				d += fad.dampingCoefficient;
-			}
-			a /= t.FADs.size();
-			f /= t.FADs.size();
-			d /= t.FADs.size();
-
-			FADtriple fadt = new FADtriple(1, 1);
-			fadt.setFAD(f, a, d);
-			fs.addFAD(fadt);
-		}
-		fs.x = x;
-		fs.y = y;
-		freeSeeds.add(fs);
-	}
+	//
+	// private void spawnSeed(int x, int y) {
+	//
+	// FreeSeed fs = new FreeSeed(0);
+	// float a = 0, f = 0, d = 0;
+	// for (TreeParticle t : treeParticles) {
+	// for (FADtriple fad : t.FADs) {
+	// a += fad.amplitude;
+	// f += fad.frequency;
+	// d += fad.dampingCoefficient;
+	// }
+	// a /= t.FADs.size();
+	// f /= t.FADs.size();
+	// d /= t.FADs.size();
+	//
+	// FADtriple fadt = new FADtriple(1, 1);
+	// fadt.setFAD(f, a, d);
+	// fs.addFAD(fadt);
+	// }
+	// fs.x = x;
+	// fs.y = y;
+	// freeSeeds.add(fs);
+	// }
 
 	// grow a bit
 	void update() {
@@ -90,6 +82,5 @@ public class Tree extends Attractor {
 			}
 		}
 	}
-
 
 }

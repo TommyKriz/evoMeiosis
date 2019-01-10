@@ -2,15 +2,25 @@ package evoMeiosis.seeds;
 
 import java.util.ArrayList;
 
+import deepSpace.DeepSpaceConstants;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import evoMeiosis.EvoMeiosisConstants;
 
 public class SeedSystem {
 
+	int[][] freeSeedFieldColor;
+	boolean[] freeSeedFieldParticle;
+
 	ArrayList<FreeSeed> freeSeeds = new ArrayList<FreeSeed>();
 
 	public SeedSystem() {
+
+		freeSeedFieldColor = new int[DeepSpaceConstants.WINDOW_WIDTH
+				* DeepSpaceConstants.WINDOW_HEIGHT][3];
+		freeSeedFieldParticle = new boolean[DeepSpaceConstants.WINDOW_WIDTH
+				* DeepSpaceConstants.WINDOW_HEIGHT];
+
 		// add free collectable seeds to playfield
 		for (int i = 0; i < EvoMeiosisConstants.INIT_SEEDS_NUMBER; i++) {
 			freeSeeds.add(new FreeSeed());
@@ -34,21 +44,22 @@ public class SeedSystem {
 
 				pgTrails.pixels[s] = color(c[0], c[1], c[2]);
 
-				int x = s % fieldWidth;
-				int y = (s - x) / fieldWidth;
+				int x = s % DeepSpaceConstants.WINDOW_WIDTH;
+				int y = (s - x) / DeepSpaceConstants.WINDOW_WIDTH;
 				pgTrails.stroke(255);
 				pgTrails.fill(color(c[0], c[1], c[2]));
 				pgTrails.ellipse(x, y, 10, 10);
-			} else if (red(pgTrails.pixels[s]) > 0
-					|| green(pgTrails.pixels[s]) > 0
+			} else if
+			// TODO: use pgTrails.red() or use parent.red()
+			(red(pgTrails.pixels[s]) > 0 || green(pgTrails.pixels[s]) > 0
 					|| blue(pgTrails.pixels[s]) > 0) {
 				// trail
-				colorMode(RGB, 255);
+				colorMode(PApplet.RGB, 255);
 				pgTrails.pixels[s] = color(
 						max(0, red(pgTrails.pixels[s]) - trailDecayRate),
 						max(0, green(pgTrails.pixels[s]) - trailDecayRate),
 						max(0, blue(pgTrails.pixels[s]) - trailDecayRate));
-				colorMode(HSB, 255);
+				colorMode(PApplet.HSB, 255);
 			}/*
 			 * else{ pg.pixels[s] = color(0, 0, 0); }
 			 */

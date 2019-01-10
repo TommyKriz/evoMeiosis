@@ -4,13 +4,15 @@ import java.util.ArrayList;
 
 import org.apache.commons.lang3.RandomUtils;
 
+import deepSpace.DeepSpaceConstants;
 import evoMeiosis.logic.Attractor;
 import evoMeiosis.logic.FADtriple;
 import processing.core.PApplet;
 
 public class FreeSeed {
 
-	private int x, y;
+	public int x;
+	public int y;
 	private float timeSinceLastUpdate = 0;
 	private boolean collected = false;
 	private boolean inTree = false;
@@ -45,7 +47,7 @@ public class FreeSeed {
 		speed = RandomUtils.nextFloat(0.5f, 1f);
 	}
 
-	void addFAD(FADtriple t) {
+	public void addFAD(FADtriple t) {
 		FADs.add(t);
 	}
 
@@ -64,8 +66,8 @@ public class FreeSeed {
 	void reset() {
 		// keep choosing random spots until an empty one is found
 		do {
-			x = floor(random(fieldWidth));
-			y = floor(random(fieldHeight));
+			x = floor(random(DeepSpaceConstants.WINDOW_WIDTH));
+			y = floor(random(DeepSpaceConstants.WINDOW_HEIGHT));
 
 		} while (!isEmpty(x, y));
 	}

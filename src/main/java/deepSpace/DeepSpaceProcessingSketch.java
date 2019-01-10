@@ -1,7 +1,6 @@
 package deepSpace;
 
 import processing.core.PApplet;
-import deepSpace.tuio.DeepSpaceTUIOHelper;
 import evoMeiosis.EvoMeiosis;
 
 public class DeepSpaceProcessingSketch extends PApplet {

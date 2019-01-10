@@ -2,6 +2,11 @@ package evoMeiosis.trees;
 
 import java.util.ArrayList;
 
+import org.apache.commons.lang3.RandomUtils;
+
+import processing.core.PApplet;
+import deepSpace.DeepSpaceConstants;
+import evoMeiosis.EvoMeiosisConstants;
 import evoMeiosis.logic.FADtriple;
 import evoMeiosis.seeds.FreeSeed;
 
@@ -27,25 +32,25 @@ public class TreeParticle {
 	void reset() {
 		// keep choosing random spots until an empty one is found
 		do {
-			x = round(random(assignedTree.originX
+			x = PApplet.round(RandomUtils.nextFloat(assignedTree.originX
 					- assignedTree.aggregatedGrowthRadius / 2,
 					assignedTree.originX + assignedTree.aggregatedGrowthRadius
 							/ 2));
-			y = round(random(assignedTree.originY
+			y = PApplet.round(RandomUtils.nextFloat(assignedTree.originY
 					- assignedTree.aggregatedGrowthRadius / 2,
 					assignedTree.originY + assignedTree.aggregatedGrowthRadius
 							/ 2));
 			if (x < 0)
 				x = 1;
-			else if (x > fieldWidth)
-				x = fieldWidth - 2;
+			else if (x > DeepSpaceConstants.WINDOW_WIDTH)
+				x = DeepSpaceConstants.WINDOW_WIDTH - 2;
 
 			if (y < 0)
 				y = 1;
-			else if (y > fieldHeight)
-				y = fieldHeight - 2;
+			else if (y > DeepSpaceConstants.WINDOW_HEIGHT)
+				y = DeepSpaceConstants.WINDOW_HEIGHT - 2;
 
-		} while (isFullyGrownAt(y * fieldWidth + x));
+		} while (isFullyGrownAt(y * DeepSpaceConstants.WINDOW_WIDTH + x));
 	}
 
 	int[] getParticleFADcolor() {
@@ -53,20 +58,16 @@ public class TreeParticle {
 		float a = 0;
 
 		for (FADtriple t : FADs) {
-			c += t.frequency - fMin;
-			a += t.amplitude - ampMin;
+			c += t.frequency - EvoMeiosisConstants.fMin;
+			a += t.amplitude - EvoMeiosisConstants.ampMin;
 		}
 
 		c = c / FADs.size();
 		a = a / FADs.size();
 
-		c = (c * 255) / (fmax - fMin);
-		a = (a * 255) / (ampMax - ampMin);
-
-		// print("a: " + a + " ");
-		// print("c:" + c + " ");
-
-		colorMode(HSB, 255);
+		c = (c * 255) / (EvoMeiosisConstants.fmax - EvoMeiosisConstants.fMin);
+		a = (a * 255)
+				/ (EvoMeiosisConstants.ampMax - EvoMeiosisConstants.ampMin);
 
 		return new int[] { (int) c, (int) a * 2, 255 };
 
@@ -84,11 +85,13 @@ public class TreeParticle {
 			for (int i = 0; i < FADs.size(); i++) {
 				FADtriple t = FADs.get(i);
 
-				float addX = t.getXOffset(globalSpeed * speed * millis() / 100);
-				float addY = t.getYOffset(globalSpeed * speed * millis() / 100);
+				float addX = t.getXOffset(EvoMeiosisConstants.globalSpeed
+						* speed * millis() / 100);
+				float addY = t.getYOffset(EvoMeiosisConstants.globalSpeed
+						* speed * millis() / 100);
 
-				x += round(addX);
-				y += round(addY);
+				x += PApplet.round(addX);
+				y += PApplet.round(addY);
 			}
 
 			// x += round(random(-1, 1));
@@ -126,8 +129,8 @@ public class TreeParticle {
 	// returns true if no neighboring pixels
 	boolean alone() {
 
-		int w = fieldWidth;
-		int h = fieldHeight;
+		int w = DeepSpaceConstants.WINDOW_WIDTH;
+		int h = DeepSpaceConstants.WINDOW_HEIGHT;
 
 		int cx = x;
 		int cy = y;

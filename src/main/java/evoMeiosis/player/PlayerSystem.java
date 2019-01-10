@@ -20,6 +20,10 @@ public class PlayerSystem {
 		return tuioClient.getPlayerPositions();
 	}
 
+	public ArrayList<Player> getPlayers() {
+		return tuioClient.getPlayers();
+	}
+
 	public void paintPlayers(PGraphics canvas) {
 		canvas.beginDraw();
 		canvas.colorMode(PApplet.HSB, 255);

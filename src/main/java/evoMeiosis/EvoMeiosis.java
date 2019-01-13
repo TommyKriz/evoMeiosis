@@ -11,7 +11,7 @@ public class EvoMeiosis {
 
 	private PApplet parent;
 
-	private PGraphics pgTrails, pgPlayerAndParticles, pgTrees, pgWall;
+	private PGraphics pgTrails, pgParticles, pgPlayers, pgTrees, pgWall;
 
 	private EvoMeiosisEngine evoMeiosisEngine;
 
@@ -21,7 +21,7 @@ public class EvoMeiosis {
 		this.parent = parent;
 		initCanvases();
 		// TODO: remove, this is for demo purposes
-		new AudioTest(parent).playSound();
+		//new AudioTest(parent).playSound();
 		agent = new Agent();
 		evoMeiosisEngine = new EvoMeiosisEngine(new DeepSpaceTUIOHelper(parent));
 
@@ -30,11 +30,16 @@ public class EvoMeiosis {
 	private void initCanvases() {
 		pgTrails = parent.createGraphics(DeepSpaceConstants.WINDOW_WIDTH,
 				DeepSpaceConstants.FLOOR_HEIGHT);
-		pgPlayerAndParticles = parent.createGraphics(
-				DeepSpaceConstants.WINDOW_WIDTH,
+		
+		pgParticles = parent.createGraphics(DeepSpaceConstants.WINDOW_WIDTH,
 				DeepSpaceConstants.FLOOR_HEIGHT);
+		
+		pgPlayers = parent.createGraphics(DeepSpaceConstants.WINDOW_WIDTH,
+				DeepSpaceConstants.FLOOR_HEIGHT);
+		
 		pgTrees = parent.createGraphics(DeepSpaceConstants.WINDOW_WIDTH,
 				DeepSpaceConstants.FLOOR_HEIGHT);
+		
 		pgWall = parent.createGraphics(DeepSpaceConstants.WINDOW_WIDTH,
 				DeepSpaceConstants.WALL_HEIGHT);
 	}
@@ -43,14 +48,18 @@ public class EvoMeiosis {
 
 		// logic
 
+		System.out.println(parent.frameRate);
 		evoMeiosisEngine.update();
-
-		// draw
-
-		// parent.millis();
-
-		evoMeiosisEngine.paintPlayers(pgPlayerAndParticles);
+		evoMeiosisEngine.paintPlayers(pgPlayers);
+		
+		//long startTime = System.currentTimeMillis();
+		evoMeiosisEngine.paintSeeds(pgParticles);
+		//System.out.println("PaintSeeds " + (System.currentTimeMillis() - startTime));
+		
+		//startTime = System.currentTimeMillis();
 		evoMeiosisEngine.paintTrails(pgTrails);
+		//System.out.println("paintTrails " + (System.currentTimeMillis() - startTime));
+		
 
 		/*
 		 * 
@@ -71,9 +80,11 @@ public class EvoMeiosis {
 
 	private void blendPGraphics() {
 		parent.image(pgTrails, 0, DeepSpaceConstants.WALL_HEIGHT);
-		parent.image(pgTrees, 0, DeepSpaceConstants.WALL_HEIGHT);
-		parent.image(pgPlayerAndParticles, 0, DeepSpaceConstants.WALL_HEIGHT);
-		parent.image(pgWall, 0, 0);
+		parent.image(pgParticles, 0, DeepSpaceConstants.WALL_HEIGHT);
+		//parent.image(pgTrees, 0, DeepSpaceConstants.WALL_HEIGHT);
+		parent.image(pgPlayers, 0, DeepSpaceConstants.WALL_HEIGHT);
+		
+		//parent.image(pgWall, 0, 0);
 	}
 
 }

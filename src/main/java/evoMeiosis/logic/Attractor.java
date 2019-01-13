@@ -1,11 +1,11 @@
 package evoMeiosis.logic;
 
 public class Attractor {
-	String type = "point";
-	float intensity = 0.1f;
-	int radius;
-	int xOrig;
-	int yOrig;
+	public String type = "point";
+	public float intensity = 0.1f;
+	public int radius;
+	public int xOrig;
+	public int yOrig;
 
 	protected Attractor(int x, int y, int radius) {
 		this.xOrig = x;

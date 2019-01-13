@@ -9,31 +9,70 @@ import evoMeiosis.EvoMeiosisConstants;
 
 public class SeedSystem {
 
-	int[][] freeSeedFieldColor;
-	boolean[] freeSeedFieldParticle;
+	//arrays for drawing pixels
+	public int[][] freeSeedFieldColor;
+	public boolean[] freeSeedFieldParticle;
 
-	ArrayList<FreeSeed> freeSeeds = new ArrayList<FreeSeed>();
+	//data array
+	public ArrayList<FreeSeed> freeSeeds = new ArrayList<FreeSeed>();
 
 	public SeedSystem() {
 
 		freeSeedFieldColor = new int[DeepSpaceConstants.WINDOW_WIDTH
-				* DeepSpaceConstants.WINDOW_HEIGHT][3];
+				* DeepSpaceConstants.FLOOR_HEIGHT][3];
 		freeSeedFieldParticle = new boolean[DeepSpaceConstants.WINDOW_WIDTH
-				* DeepSpaceConstants.WINDOW_HEIGHT];
+				* DeepSpaceConstants.FLOOR_HEIGHT];
 
 		// add free collectable seeds to playfield
 		for (int i = 0; i < EvoMeiosisConstants.INIT_SEEDS_NUMBER; i++) {
-			freeSeeds.add(new FreeSeed());
+			freeSeeds.add(new FreeSeed(this));
 		}
 	}
-
-	public void renderFreeSeeds(PGraphics pgTrails,
-			PGraphics pgPlayerAndParticles) {
-		for (int f = 0; f < freeSeeds.size(); f++) {
-			freeSeeds.get(f).update();
+	
+	public void destroy(FreeSeed s) {
+		freeSeedFieldParticle[s.x + s.y * DeepSpaceConstants.WINDOW_WIDTH] = false;
+		freeSeeds.remove(s);
+	}
+	
+	boolean isEmpty(int x, int y) {
+		// println("new pos" + x + " " + y);
+		return !freeSeedFieldParticle[y * DeepSpaceConstants.WINDOW_WIDTH + x];
+		// return freeSeedFieldColor[y * fieldWidth + x] == new int[] {0, 0,
+		// 0};
+	}
+	
+	public void paintTrailsV2(PGraphics pgTrails) {
+		pgTrails.beginDraw();
+		//pgTrails.loadPixels();
+		
+		pgTrails.colorMode(pgTrails.HSB, 255);
+		//pgTrails.clear();
+		pgTrails.background(0,0,0,255);
+		//pgTrails.background(0,0,0,0);
+		pgTrails.noStroke();
+		
+		for(FreeSeed s : freeSeeds) {
+			int[] c = s.getParticleHSLcolor();
+			
+			for(int i=0; i<s.trail.length;i++) {
+				float decay = (float)i / (float) s.trail.length;
+				pgTrails.fill(pgTrails.color(c[0], c[1], c[2], 200- decay*255));
+				int elSize = (int) (5f - 5f*decay);
+				pgTrails.ellipse(s.trail[i][0], s.trail[i][1], elSize, elSize);
+			}
+			
 		}
+		pgTrails.endDraw();
+		//pgTrails.updatePixels();
+	}
+	
+	
 
+	public void paintTrails(PGraphics pgTrails) {
+		
+		pgTrails.beginDraw();
 		pgTrails.loadPixels();
+		
 		// draw free seedsField
 		for (int s = 0; s < freeSeedFieldParticle.length; s++) {
 			// println("before " + brightness(pg.pixels[s]));
@@ -42,55 +81,83 @@ public class SeedSystem {
 				// particle
 				int[] c = freeSeedFieldColor[s];
 
-				pgTrails.pixels[s] = color(c[0], c[1], c[2]);
+				pgTrails.pixels[s] = pgTrails.color(c[0], c[1], c[2]);
 
 				int x = s % DeepSpaceConstants.WINDOW_WIDTH;
 				int y = (s - x) / DeepSpaceConstants.WINDOW_WIDTH;
 				pgTrails.stroke(255);
-				pgTrails.fill(color(c[0], c[1], c[2]));
+				pgTrails.fill(pgTrails.color(c[0], c[1], c[2]));
 				pgTrails.ellipse(x, y, 10, 10);
 			} else if
-			// TODO: use pgTrails.red() or use parent.red()
-			(red(pgTrails.pixels[s]) > 0 || green(pgTrails.pixels[s]) > 0
-					|| blue(pgTrails.pixels[s]) > 0) {
+			(pgTrails.red(pgTrails.pixels[s]) > 0 || pgTrails.green(pgTrails.pixels[s]) > 0
+					|| pgTrails.blue(pgTrails.pixels[s]) > 0) {
+				
 				// trail
-				colorMode(PApplet.RGB, 255);
-				pgTrails.pixels[s] = color(
-						max(0, red(pgTrails.pixels[s]) - trailDecayRate),
-						max(0, green(pgTrails.pixels[s]) - trailDecayRate),
-						max(0, blue(pgTrails.pixels[s]) - trailDecayRate));
-				colorMode(PApplet.HSB, 255);
+				pgTrails.colorMode(PApplet.RGB, 255);
+				pgTrails.pixels[s] = pgTrails.color(
+						Math.max(0, pgTrails.red(pgTrails.pixels[s]) - EvoMeiosisConstants.trailDecayRate),
+						Math.max(0, pgTrails.green(pgTrails.pixels[s]) - EvoMeiosisConstants.trailDecayRate),
+						Math.max(0, pgTrails.blue(pgTrails.pixels[s]) - EvoMeiosisConstants.trailDecayRate));
+				pgTrails.colorMode(PApplet.HSB, 255);
 			}/*
 			 * else{ pg.pixels[s] = color(0, 0, 0); }
 			 */
 			// println("after " + brightness(pg.pixels[s]));
 		}
 		pgTrails.updatePixels();
-
+	}
+	
+	
+	public void updateAndPaintSeeds(PGraphics pgPlayerAndParticles) {
+		
 		pgPlayerAndParticles.beginDraw();
+		pgPlayerAndParticles.clear();
+		
+		//pgPlayerAndParticles.background(0, 0, 0, 255);
 		pgPlayerAndParticles.background(0, 0, 0, 0);
+		
+		for(FreeSeed s : freeSeeds) {
+			s.update();
+			int[] c = s.getParticleHSLcolor();
+			pgPlayerAndParticles.noStroke();
+			//pgPlayerAndParticles.stroke(c[0], c[1], c[2], 150);
+			
+			//pgPlayerAndParticles.fill(pgPlayerAndParticles.color(0, 0, 255, 150));
+			//pgPlayerAndParticles.ellipse(s.x, s.y, 2, 2);
+			/*
+			pgPlayerAndParticles.fill(pgPlayerAndParticles.color(c[0], c[1], c[2], 150));
+			pgPlayerAndParticles.ellipse(s.x, s.y, 4, 4);
+			pgPlayerAndParticles.fill(pgPlayerAndParticles.color(c[0], c[1], c[2], 80));
+			pgPlayerAndParticles.ellipse(s.x, s.y, 8, 8);
+			*/
+			//pgPlayerAndParticles.fill(pgPlayerAndParticles.color(c[0], c[1], c[2], 20));
+			//pgPlayerAndParticles.ellipse(s.x, s.y, 16, 16);
+			//pgPlayerAndParticles.fill(pgPlayerAndParticles.color(0, 0, 255, 20));
+			//pgPlayerAndParticles.ellipse(s.x, s.y, 18, 18);
+			//pgPlayerAndParticles.fill(pgPlayerAndParticles.color(0, 0, 255, 15));
+			//pgPlayerAndParticles.ellipse(s.x, s.y, 22, 22);
+			//pgPlayerAndParticles.fill(pgPlayerAndParticles.color(0, 0, 255, 10));
+			//pgPlayerAndParticles.ellipse(s.x, s.y, 30, 30);
+			//pgPlayerAndParticles.fill(pgPlayerAndParticles.color(0, 0, 255, 5));
+			//pgPlayerAndParticles.ellipse(s.x, s.y, 40, 40);
+			
+			pgPlayerAndParticles.fill(pgPlayerAndParticles.color(0, 0, 255, 20));
+			pgPlayerAndParticles.ellipse(s.x, s.y, 10, 10);
+		}
 
+		
+		/*
 		for (int s = 0; s < freeSeedFieldParticle.length; s++) {
 			// println("before " + brightness(pg.pixels[s]));
 			if (freeSeedFieldParticle[s]) {
 				// colorMode(HSB, 255);
 				// particle
 				int[] c = freeSeedFieldColor[s];
-				int x = s % fieldWidth;
-				int y = (s - x) / fieldWidth;
-				pgPlayerAndParticles.noStroke();
-				pgPlayerAndParticles.fill(color(0, 0, 255, 150));
-				pgPlayerAndParticles.ellipse(x, y, 2, 2);
-				pgPlayerAndParticles.fill(color(c[0], c[1], c[2], 150));
-				pgPlayerAndParticles.ellipse(x, y, 4, 4);
-				pgPlayerAndParticles.fill(color(c[0], c[1], c[2], 80));
-				pgPlayerAndParticles.ellipse(x, y, 8, 8);
-				pgPlayerAndParticles.fill(color(c[0], c[1], c[2], 20));
-				pgPlayerAndParticles.ellipse(x, y, 16, 16);
-				pgPlayerAndParticles.fill(color(0, 0, 255, 20));
-				pgPlayerAndParticles.ellipse(x, y, 18, 18);
+				int x = s % DeepSpaceConstants.WINDOW_WIDTH;
+				int y = (s - x) / DeepSpaceConstants.WINDOW_WIDTH;
+				
 			}
-		}
+		}*/
 		pgPlayerAndParticles.endDraw();
 
 	}

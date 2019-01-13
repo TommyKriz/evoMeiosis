@@ -1,6 +1,7 @@
 package evoMeiosis.logic;
 
 import org.apache.commons.lang3.RandomUtils;
+import org.apache.commons.math3.util.FastMath;
 
 import evoMeiosis.EvoMeiosisConstants;
 
@@ -19,8 +20,8 @@ public class FADtriple {
 				* RandomUtils.nextFloat(EvoMeiosisConstants.ampMin,
 						EvoMeiosisConstants.ampMax);
 		dampingCoefficient = RandomUtils.nextFloat(0.1f, 0.5f);
-		phase1 = RandomUtils.nextFloat(-1 - 0f, 1.0f);
-		phase2 = RandomUtils.nextFloat(-1.0f, 1.0f);
+		phase1 = RandomUtils.nextFloat(0f, 1.0f) * 2 - 1;
+		phase2 = RandomUtils.nextFloat(0f, 1.0f) * 2 - 1;
 	}
 
 	public void setFAD(float f, float a, float d) {
@@ -29,17 +30,14 @@ public class FADtriple {
 		dampingCoefficient = d;
 	}
 
-	// private double getXOffset(float i) {
-	// return amplitude * FastMath.cos(i * frequency + phase1); // * (float)
-	// // ((millis()%1000)/1000)
-	// // *
-	// // t.dampingCoefficient;
-	// }
-	//
-	// private double getYOffset(float i) {
-	// return amplitude * Math.sin(i * frequency + phase2); // * (float)
-	// // ((millis()%1000)/1000)
-	// // *
-	// // t.dampingCoefficient;
-	// }
+   public double getXOffset(double i) {
+	   double offset = amplitude * Math.cos(i * frequency + phase1); 
+	   return offset;// * (float)
+	}
+	
+	 public double getYOffset(double i) {
+		 double offset = amplitude * Math.cos(i * frequency + phase2); 
+		   return offset;// * (float)
+
+	 }
 }

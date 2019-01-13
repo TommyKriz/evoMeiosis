@@ -1,5 +1,6 @@
 package evoMeiosis.trees;
 
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 import org.apache.commons.lang3.RandomUtils;
@@ -16,13 +17,15 @@ public class TreeParticle {
 	ArrayList<FADtriple> FADs = new ArrayList<FADtriple>();
 	Tree assignedTree;
 	float speed = 1;
+	TreeSystem ts;
 
-	TreeParticle(FreeSeed s, Tree t) {
+	TreeParticle(TreeSystem ts, FreeSeed s, Tree t) {
 		FADs = s.FADs;
 		assignedTree = t;
 		s.collected = false;
 		s.inTree = true;
 		reset();
+		this.ts = ts;
 	}
 
 	void addFAD(FADtriple t) {
@@ -50,7 +53,7 @@ public class TreeParticle {
 			else if (y > DeepSpaceConstants.WINDOW_HEIGHT)
 				y = DeepSpaceConstants.WINDOW_HEIGHT - 2;
 
-		} while (isFullyGrownAt(y * DeepSpaceConstants.WINDOW_WIDTH + x));
+		} while (ts.isFullyGrownAt(y * DeepSpaceConstants.WINDOW_WIDTH + x));
 	}
 
 	int[] getParticleFADcolor() {
@@ -75,6 +78,7 @@ public class TreeParticle {
 	}
 
 	boolean update() {
+		long ms = System.currentTimeMillis();
 		// move around
 		if (!stuck) {
 
@@ -85,10 +89,10 @@ public class TreeParticle {
 			for (int i = 0; i < FADs.size(); i++) {
 				FADtriple t = FADs.get(i);
 
-				float addX = t.getXOffset(EvoMeiosisConstants.globalSpeed
-						* speed * millis() / 100);
-				float addY = t.getYOffset(EvoMeiosisConstants.globalSpeed
-						* speed * millis() / 100);
+				float addX = (float) t.getXOffset(EvoMeiosisConstants.frequencyScale
+						* speed * ms / 100);
+				float addY = (float) t.getYOffset(EvoMeiosisConstants.frequencyScale
+						* speed * ms / 100);
 
 				x += PApplet.round(addX);
 				y += PApplet.round(addY);
@@ -99,11 +103,11 @@ public class TreeParticle {
 
 			// println("x: " +x + "y: " + y);
 
-			if (distance(x, y, assignedTree.originX, assignedTree.originY) > assignedTree.aggregatedGrowthRadius
+			if (Point2D.distance(x, y, assignedTree.originX, assignedTree.originY) > assignedTree.aggregatedGrowthRadius
 					|| x < 0
 					|| y < 0
-					|| x > (fieldWidth - 1)
-					|| y > (fieldHeight - 1)) {
+					|| x > (DeepSpaceConstants.WINDOW_WIDTH - 1)
+					|| y > (DeepSpaceConstants.WINDOW_HEIGHT - 1)) {
 				reset();
 				return false;
 			}
@@ -113,7 +117,7 @@ public class TreeParticle {
 				// println("stuck");
 				stuck = true;
 				int[] c = getParticleFADcolor();
-				setTreeColorField(x, y, c[0], c[1], 255);
+				ts.setTreeColorField(x, y, c[0], c[1], 255);
 				assignedTree.aggregatedGrowthRadius += 1;
 				return true;
 			} else {
@@ -152,14 +156,14 @@ public class TreeParticle {
 		ty *= w;
 
 		// N, W, E, S
-		if (isFullyGrownAt(cx + ty) || isFullyGrownAt(lx + cy)
-				|| isFullyGrownAt(rx + cy) || isFullyGrownAt(cx + by))
+		if (ts.isFullyGrownAt(cx + ty) || ts.isFullyGrownAt(lx + cy)
+				|| ts.isFullyGrownAt(rx + cy) || ts.isFullyGrownAt(cx + by))
 			return false;
 
 		// NW, NE, SW, SE
 
-		if (isFullyGrownAt(lx + ty) || isFullyGrownAt(lx + by)
-				|| isFullyGrownAt(rx + ty) || isFullyGrownAt(rx + by))
+		if (ts.isFullyGrownAt(lx + ty) || ts.isFullyGrownAt(lx + by)
+				|| ts.isFullyGrownAt(rx + ty) || ts.isFullyGrownAt(rx + by))
 			return false;
 
 		return true;

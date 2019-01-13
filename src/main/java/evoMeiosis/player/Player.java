@@ -10,21 +10,21 @@ public class Player extends Attractor {
 
 	public int id;
 
-	ArrayList<FreeSeed> seeds;
+	public ArrayList<FreeSeed> collectedSeeds;
 
 	public Player(int x, int y, int id) {
 		super(x, y, EvoMeiosisConstants.PLAYER_CATCH_RADIUS);
 		this.id = id;
-		seeds = new ArrayList<FreeSeed>();
+		collectedSeeds = new ArrayList<FreeSeed>();
 	}
 
 	void update() {
-
+		System.out.println(id + " : " + collectedSeeds.size());
 	}
 
 	// release all Seeds
 	void release() {
-		for (FreeSeed s : seeds) {
+		for (FreeSeed s : collectedSeeds) {
 			s.free();
 		}
 	}

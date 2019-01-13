@@ -14,7 +14,7 @@ public class DeepSpaceProcessingSketch extends PApplet {
 
 	@Override
 	public void setup() {
-		// frameRate(30);
+		frameRate(30);
 		evoMeiosis = new EvoMeiosis(this);
 
 	}

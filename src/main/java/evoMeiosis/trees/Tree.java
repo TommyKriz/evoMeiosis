@@ -9,34 +9,36 @@ import evoMeiosis.logic.FADtriple;
 import evoMeiosis.seeds.FreeSeed;
 
 public class Tree extends Attractor {
-	int originX, originY;
-	float aggregatedGrowthRadius;
-	ArrayList<TreeParticle> treeParticles;
-	PGraphics pgT;
-	int seedConversionFactor = 1000;
-	int seedSpawnRate = 100;
-	int stuckCnt = 0;
+	public int originX, originY;
+	public float aggregatedGrowthRadius;
+	public ArrayList<TreeParticle> treeParticles;
+	public PGraphics pgT;
+	public int seedConversionFactor = 1000;
+	public int seedSpawnRate = 100;
+	public int stuckCnt = 0;
+	TreeSystem ts;
 
-	Tree(int mx, int my) {
-		super(mx, my, EvoMeiosisConstants.TREE_RADIUS);
+	Tree(TreeSystem ts, int mx, int my) {
+		super(mx, my, EvoMeiosisConstants.TREE_RADIUS); 
 		originX = mx;
 		originY = my;
 		aggregatedGrowthRadius = 200;
 		// add seed at the middle
 		treeParticles = new ArrayList<TreeParticle>();
+		this.ts = ts;
 	}
 
 	// add seeds and convert them to TreeParticles so they can be used to
 	// grow the tree
-	void addSeeds(FreeSeed[] seedsToBeAdded) {
+	public void addSeeds(FreeSeed[] seedsToBeAdded) {
 		for (int i = 0; i < seedsToBeAdded.length; i++) {
-			treeParticles.add(new TreeParticle(seedsToBeAdded[i], this));
+			treeParticles.add(new TreeParticle(ts, seedsToBeAdded[i], this));
 		}
 	}
 
-	void addSeed(FreeSeed seed) {
+	public void addSeed(FreeSeed seed) {
 		for (int i = 0; i < seedConversionFactor; i++) {
-			treeParticles.add(new TreeParticle(seed, this));
+			treeParticles.add(new TreeParticle(ts, seed, this));
 		}
 	}
 

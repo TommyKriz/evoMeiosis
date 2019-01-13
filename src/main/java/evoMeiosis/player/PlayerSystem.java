@@ -24,13 +24,21 @@ public class PlayerSystem {
 		return tuioClient.getPlayers();
 	}
 
+	public void update() {
+		for(Player p : getPlayers()) {
+			p.update();
+		}
+	}
+	
 	public void paintPlayers(PGraphics canvas) {
 		canvas.beginDraw();
+		canvas.clear();
+		canvas.background(0,0,0,0);
 		canvas.colorMode(PApplet.HSB, 255);
 		canvas.fill(150, 100, 100, 80);
 		canvas.stroke(255, 0, 255, 150);
 
-		canvas.ellipse(200, 400, 100, 100);
+		//canvas.ellipse(200, 400, 100, 100);
 
 		for (PVector p : getPlayerPositions()) {
 			canvas.ellipse(p.x, p.y, EvoMeiosisConstants.PLAYER_CATCH_RADIUS,

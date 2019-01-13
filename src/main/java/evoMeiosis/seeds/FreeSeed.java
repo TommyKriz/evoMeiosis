@@ -1,10 +1,13 @@
 package evoMeiosis.seeds;
 
+import java.awt.Color;
 import java.util.ArrayList;
+import java.util.UUID;
 
 import org.apache.commons.lang3.RandomUtils;
 
 import deepSpace.DeepSpaceConstants;
+import evoMeiosis.EvoMeiosisConstants;
 import evoMeiosis.logic.Attractor;
 import evoMeiosis.logic.FADtriple;
 import processing.core.PApplet;
@@ -13,38 +16,50 @@ public class FreeSeed {
 
 	public int x;
 	public int y;
-	private float timeSinceLastUpdate = 0;
-	private boolean collected = false;
-	private boolean inTree = false;
-	private boolean xIncr = false;
-	private boolean yIncr = false;
-	private float speed = 1;
-	private Attractor attr;
-	private float flyAwayTime = 1000;
-	private boolean releaseStart = false;
+	public String uniqueID = UUID.randomUUID().toString();
+	public float timeSinceLastUpdate = 0;
+	public boolean collected = false;
+	public boolean inTree = false;
+	public boolean xIncr = false;
+	public boolean yIncr = false;
+	public float speed = 1;
+	public Attractor attr;
+	public float flyAwayTime = 1000;
+	public boolean releaseStart = false;
+	long initMs;
+	int trailLength = 20;
+	
+	//for trails
+	int[][] trail;
+	
+	
+	private SeedSystem s;
 
-	ArrayList<FADtriple> FADs = new ArrayList<FADtriple>();
-
-	FreeSeed() {
-		// println("new free seed");
-		reset();
+	public ArrayList<FADtriple> FADs = new ArrayList<FADtriple>();
+	
+	FreeSeed(SeedSystem s){
+		speed = RandomUtils.nextFloat(0.5f, 1f);
+		this.s = s;
+		initMs = System.currentTimeMillis();
 		FADs.add(new FADtriple(0.1f, 0.1f));
 		FADs.add(new FADtriple(0.5f, 0.5f));
 		FADs.add(new FADtriple(1f, 1f));
-		speed = RandomUtils.nextFloat(0.5f, 1f);
+		reset();
+		initTrail();
 	}
 
-	public FreeSeed(int n) {
-		// println("new free seed");
-		reset();
-		speed = RandomUtils.nextFloat(0.5f, 1f);
+	FreeSeed(SeedSystem s, int trailLength) {
+		this(s);
+		FADs.add(new FADtriple(0.1f, 0.1f));
+		FADs.add(new FADtriple(0.5f, 0.5f));
+		FADs.add(new FADtriple(1f, 1f));
+		this.trailLength = trailLength;
+		initTrail();
 	}
 
-	FreeSeed(FADtriple t) {
-		// println("new free seed");
-		reset();
+	public FreeSeed(SeedSystem s, FADtriple t) {
+		this(s);
 		FADs.add(t);
-		speed = RandomUtils.nextFloat(0.5f, 1f);
 	}
 
 	public void addFAD(FADtriple t) {
@@ -58,53 +73,43 @@ public class FreeSeed {
 		}
 	}
 
-	void destroy() {
-		freeSeedFieldParticle[x + y * DeepSpaceConstants.WINDOW_WIDTH] = false;
-		freeSeeds.remove(this);
-	}
 
 	void reset() {
 		// keep choosing random spots until an empty one is found
 		do {
-			x = floor(random(DeepSpaceConstants.WINDOW_WIDTH));
-			y = floor(random(DeepSpaceConstants.WINDOW_HEIGHT));
+			x = (int) (Math.random() * DeepSpaceConstants.WINDOW_WIDTH);
+			y = (int) (Math.random() * DeepSpaceConstants.FLOOR_HEIGHT);
 
-		} while (!isEmpty(x, y));
+		} while (!s.isEmpty(x, y));
 	}
 
-	boolean isEmpty(int x, int y) {
-		// println("new pos" + x + " " + y);
-		return !freeSeedFieldParticle[y * fieldWidth + x];
-		// return freeSeedFieldColor[y * fieldWidth + x] == new int[] {0, 0,
-		// 0};
-	}
+	
 
 	void idxInBounds() {
-		if ((x + y * fieldWidth) < 0
-				|| (x + y * fieldWidth) > (fieldWidth * fieldHeight - 1)) {
+		if ((x + y * DeepSpaceConstants.WINDOW_WIDTH) < 0
+				|| (x + y * DeepSpaceConstants.WINDOW_WIDTH) > (DeepSpaceConstants.WINDOW_WIDTH * DeepSpaceConstants.FLOOR_HEIGHT - 1)) {
 			reset();
 		}
 	}
+	
 
-	int[] getParticleFADcolor() {
+	public int[] getParticleHSLcolor() {
 		float c = 0;
 		float a = 0;
 
 		for (FADtriple t : FADs) {
-			c += t.frequency - fMin;
-			a += t.amplitude - ampMin;
+			c += t.frequency - EvoMeiosisConstants.fMin;
+			a += t.amplitude - EvoMeiosisConstants.ampMin;
 		}
 
 		c = c / FADs.size();
 		a = a / FADs.size();
 
-		c = (c * 255) / (fmax - fMin);
-		a = (a * 255) / (ampMax - ampMin);
+		c = (c * 255) / (EvoMeiosisConstants.fmax - EvoMeiosisConstants.fMin);
+		a = (a * 255) / (EvoMeiosisConstants.ampMax - EvoMeiosisConstants.ampMin);
 
 		// print("a: " + a + " ");
 		// print("c:" + c + " ");
-
-		colorMode(HSB, 255);
 
 		return new int[] { (int) c, (int) a, 255 };
 
@@ -113,7 +118,8 @@ public class FreeSeed {
 
 	void update() {
 
-		timeSinceLastUpdate = millis() - timeSinceLastUpdate;
+		long ms = System.currentTimeMillis() - initMs;
+		timeSinceLastUpdate = ms - timeSinceLastUpdate;
 
 		// delete from old pos
 		if (releaseStart && collected) {
@@ -123,21 +129,27 @@ public class FreeSeed {
 				releaseStart = false;
 				attr.intensity = -attr.intensity;
 				attr = null;
-				println("released");
+				//println("released");
 			}
 		}
 
-		freeSeedFieldParticle[x + y * fieldWidth] = false;
+		//s.freeSeedFieldParticle[x + y * DeepSpaceConstants.WINDOW_WIDTH] = false;
 
 		// calc new pos
 		for (int i = 0; i < FADs.size(); i++) {
 			FADtriple t = FADs.get(i);
 
-			float addX = t.getXOffset(globalSpeed * speed * millis() / 10000);
-			float addY = t.getYOffset(globalSpeed * speed * millis() / 10000);
-
-			x += round(addX);
-			y += round(addY);
+			float o = EvoMeiosisConstants.frequencyScale * speed * ms / 10000;
+			double addX = t.getXOffset(o);
+			double addY = t.getYOffset(o);
+			
+			int roundedX = (int) Math.round(addX);
+			int roundedY = (int) Math.round(addY);
+			
+			///System.out.println(addX + " " + addY);
+			
+			x += roundedX;
+			y += roundedY;
 		}
 
 		if (attr != null) {
@@ -148,8 +160,25 @@ public class FreeSeed {
 		// check if in bounds, otherwise respawn
 		idxInBounds();
 		// set new pos
-		freeSeedFieldParticle[x + y * fieldWidth] = true;
-		freeSeedFieldColor[x + y * fieldWidth] = getParticleFADcolor();
+		//s.freeSeedFieldParticle[x + y * DeepSpaceConstants.WINDOW_WIDTH] = true;
+		updateTrail(x, y);
+		//
+		
+		//s.freeSeedFieldColor[x + y * DeepSpaceConstants.WINDOW_WIDTH] = getParticleHSLcolor();
 
+	}
+	
+	private void initTrail() {
+		trail = new int[trailLength][2];
+		for(int i=0; i< trail.length; i++) {
+			trail[i] = new int[] {-1, -1};
+		}
+	}
+	
+	private void updateTrail(int x, int y) {
+		for(int i= trail.length-1; i>0 ; i--) {
+			trail[i] = trail[i-1];
+		}
+		trail[0] = new int[] {x, y};
 	}
 }

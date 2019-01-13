@@ -12,7 +12,7 @@ public class TreeSystem {
 
 	private int[][] treeFieldColor;
 
-	private ArrayList<Tree> trees = new ArrayList<Tree>();
+	public ArrayList<Tree> trees = new ArrayList<Tree>();
 
 	public TreeSystem() {
 		treeFieldColor = new int[DeepSpaceConstants.WINDOW_WIDTH
@@ -97,7 +97,7 @@ public class TreeSystem {
 						}
 					}
 					if (!treeAlreadyThere) {
-						trees.add(new Tree(mx, my));
+						trees.add(new Tree(this, mx, my));
 						growFundament(mx, my, 1);
 					}
 

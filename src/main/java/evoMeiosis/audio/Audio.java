@@ -11,7 +11,9 @@ public class Audio {
 	SoundFile BGphase2;
 	SoundFile BGphase3;
 	int phase;
-	int amountSeeds;
+	
+	boolean BGsoundSkippable;
+	boolean skippable;
 
 	void setup(PApplet parent) {
 		treeCreation = new SoundFile(parent, "treecreation_sound.wav");
@@ -20,10 +22,14 @@ public class Audio {
 		BGphase2 = new SoundFile(parent, "BGStage2_96k.wav");
 		BGphase3 = new SoundFile(parent, "BGStage3_96k.wav");
 		phase = 1;
+		BGsoundSkippable = false;
+		BGphase1.loop();
+		skippable = false;
 	}
 
-	void newTreeCreated() {
-		treeCreation.play();
+	public void newTreeCreated() {
+		treeCreation.play();	// called as new tree creation is started in TreeSystem
+		
 		// play creation sound -> internet
 		// starts when tree is being created until it is finished -> rising
 		// intensity
@@ -31,8 +37,15 @@ public class Audio {
 		// agents -> filter
 	}
 
-	void agentsSpawning() {
-		agentSpawn.play();
+	public void agentsSpawning(int freeSeeds) {
+		agentSpawn.play();	// called as seeds spawn in SeedSystem
+		if(phase == 1 && freeSeeds >= 15) {
+			phase = 2;
+			skippable = true;
+		} else if(phase == 0 && freeSeeds >= 25) {
+			phase = 3;
+			skippable = true;
+		}
 		// play spawn sound -> internet
 		// maybe change sound depending on which agents spawn -> get involved
 		// agents -> filter
@@ -48,36 +61,32 @@ public class Audio {
 		// on, to get more intensity
 	}
 
-	void backgroundJingle(int phase) {
-		if (phase == 1) {
-			BGphase1.loop();
+	public void soundUpdate() {
+		if(!skippable) {
 			return;
 		}
-		if (phase == 2) {
-			while (BGphase1.percent() != 100) {
-				// method needs coroutine so the whole program doesn't get stuck
-				// in while
-			}
+		checkBGcompleteness();
+		if(phase == 2 && BGsoundSkippable) {
 			BGphase1.stop();
 			BGphase2.loop();
-			return;
-		}
-		if (phase == 3) {
-			while (BGphase2.percent() != 100) {
-				// method needs coroutine so the whole program doesn't get stuck
-				// in while
-			}
+			BGsoundSkippable = false;
+			phase = 0;
+			skippable = false;
+		} else if(phase == 3 && BGsoundSkippable) {
 			BGphase2.stop();
 			BGphase3.loop();
-			return;
+			BGsoundSkippable = false;
+			skippable = false;
 		}
 	}
 	
-	public void playSound() {
-		if(amountSeeds < 10) { phase = 1; }
-		if(amountSeeds >= 10 && amountSeeds < 20) { phase = 2;}
-		if(amountSeeds >= 20) { phase = 3;}
-		backgroundJingle(phase);
+	private void checkBGcompleteness() {
+		if (phase == 2 && BGphase1.percent() >= 99.5) {
+				BGsoundSkippable = true;
+		}
+		if (phase == 3 && BGphase2.percent() >= 99.5) {
+			BGsoundSkippable = true;
+		}
 	}
 
 }

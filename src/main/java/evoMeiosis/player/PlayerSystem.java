@@ -56,6 +56,8 @@ public class PlayerSystem {
 			}
 		}
 
+		activeIds = getActiveIds();
+		
 		ArrayList<Integer> removePlayers = new ArrayList<>();
 
 		if (activePlayers.size() > tuioPlayers.size()) {

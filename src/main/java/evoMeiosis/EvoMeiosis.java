@@ -60,7 +60,7 @@ public class EvoMeiosis {
 		evoMeiosisEngine.paintTrails(pgTrails);
 		//System.out.println("paintTrails " + (System.currentTimeMillis() - startTime));
 		
-
+		//evoMeiosisEngine.paintTrees(pgTrees);
 		/*
 		 * 
 		 * 

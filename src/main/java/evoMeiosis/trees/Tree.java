@@ -6,7 +6,7 @@ import processing.core.PGraphics;
 import evoMeiosis.EvoMeiosisConstants;
 import evoMeiosis.logic.Attractor;
 import evoMeiosis.logic.FADtriple;
-import evoMeiosis.seeds.FreeSeed;
+import evoMeiosis.seeds.Seed;
 
 public class Tree extends Attractor {
 	public int originX, originY;
@@ -30,13 +30,13 @@ public class Tree extends Attractor {
 
 	// add seeds and convert them to TreeParticles so they can be used to
 	// grow the tree
-	public void addSeeds(FreeSeed[] seedsToBeAdded) {
+	public void addSeeds(Seed[] seedsToBeAdded) {
 		for (int i = 0; i < seedsToBeAdded.length; i++) {
 			treeParticles.add(new TreeParticle(ts, seedsToBeAdded[i], this));
 		}
 	}
 
-	public void addSeed(FreeSeed seed) {
+	public void addSeed(Seed seed) {
 		for (int i = 0; i < seedConversionFactor; i++) {
 			treeParticles.add(new TreeParticle(ts, seed, this));
 		}

@@ -14,7 +14,7 @@ public class SeedSystem {
 	public boolean[] freeSeedFieldParticle;
 
 	//data array
-	public ArrayList<FreeSeed> freeSeeds = new ArrayList<FreeSeed>();
+	public ArrayList<Seed> freeSeeds = new ArrayList<Seed>();
 
 	public SeedSystem() {
 
@@ -25,11 +25,11 @@ public class SeedSystem {
 
 		// add free collectable seeds to playfield
 		for (int i = 0; i < EvoMeiosisConstants.INIT_SEEDS_NUMBER; i++) {
-			freeSeeds.add(new FreeSeed(this));
+			freeSeeds.add(new Seed(this));
 		}
 	}
 	
-	public void destroy(FreeSeed s) {
+	public void destroy(Seed s) {
 		freeSeedFieldParticle[s.x + s.y * DeepSpaceConstants.WINDOW_WIDTH] = false;
 		freeSeeds.remove(s);
 	}
@@ -51,7 +51,7 @@ public class SeedSystem {
 		//pgTrails.background(0,0,0,0);
 		pgTrails.noStroke();
 		
-		for(FreeSeed s : freeSeeds) {
+		for(Seed s : freeSeeds) {
 			int[] c = s.getParticleHSLcolor();
 			
 			for(int i=0; i<s.trail.length;i++) {
@@ -116,7 +116,7 @@ public class SeedSystem {
 		//pgPlayerAndParticles.background(0, 0, 0, 255);
 		pgPlayerAndParticles.background(0, 0, 0, 0);
 		
-		for(FreeSeed s : freeSeeds) {
+		for(Seed s : freeSeeds) {
 			s.update();
 			int[] c = s.getParticleHSLcolor();
 			pgPlayerAndParticles.noStroke();

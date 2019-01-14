@@ -4,18 +4,18 @@ import java.util.ArrayList;
 
 import evoMeiosis.EvoMeiosisConstants;
 import evoMeiosis.logic.Attractor;
-import evoMeiosis.seeds.FreeSeed;
+import evoMeiosis.seeds.Seed;
 
 public class Player extends Attractor {
 
 	public long id;
 
-	public ArrayList<FreeSeed> collectedSeeds;
+	public ArrayList<Seed> collectedSeeds;
 
 	public Player(float x, float y, long id) {
 		super(x, y, EvoMeiosisConstants.PLAYER_CATCH_RADIUS);
 		this.id = id;
-		collectedSeeds = new ArrayList<FreeSeed>();
+		collectedSeeds = new ArrayList<Seed>();
 	}
 
 	void update(float x, float y) {
@@ -26,7 +26,7 @@ public class Player extends Attractor {
 
 	// release all Seeds
 	void release() {
-		for (FreeSeed s : collectedSeeds) {
+		for (Seed s : collectedSeeds) {
 			s.free();
 		}
 	}

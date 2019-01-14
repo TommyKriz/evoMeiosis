@@ -12,7 +12,7 @@ import evoMeiosis.logic.Attractor;
 import evoMeiosis.logic.FADtriple;
 import processing.core.PApplet;
 
-public class FreeSeed {
+public class Seed {
 
 	public int x;
 	public int y;
@@ -37,7 +37,7 @@ public class FreeSeed {
 
 	public ArrayList<FADtriple> FADs = new ArrayList<FADtriple>();
 	
-	FreeSeed(SeedSystem s){
+	Seed(SeedSystem s){
 		speed = RandomUtils.nextFloat(0.5f, 1f);
 		this.s = s;
 		initMs = System.currentTimeMillis();
@@ -48,7 +48,7 @@ public class FreeSeed {
 		initTrail();
 	}
 
-	FreeSeed(SeedSystem s, int trailLength) {
+	Seed(SeedSystem s, int trailLength) {
 		this(s);
 		FADs.add(new FADtriple(0.1f, 0.1f));
 		FADs.add(new FADtriple(0.5f, 0.5f));
@@ -57,7 +57,7 @@ public class FreeSeed {
 		initTrail();
 	}
 
-	public FreeSeed(SeedSystem s, FADtriple t) {
+	public Seed(SeedSystem s, FADtriple t) {
 		this(s);
 		FADs.add(t);
 	}

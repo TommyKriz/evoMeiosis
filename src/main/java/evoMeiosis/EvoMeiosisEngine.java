@@ -6,7 +6,7 @@ import java.awt.geom.Point2D;
 import processing.core.PGraphics;
 import evoMeiosis.player.Player;
 import evoMeiosis.player.PlayerSystem;
-import evoMeiosis.seeds.FreeSeed;
+import evoMeiosis.seeds.Seed;
 import evoMeiosis.seeds.SeedSystem;
 import evoMeiosis.trees.Tree;
 import evoMeiosis.trees.TreeSystem;
@@ -39,7 +39,7 @@ public class EvoMeiosisEngine {
 
 		for (int f = 0; f < seedSystem.freeSeeds.size(); f++) {
 			// add to player if in range
-			FreeSeed s = seedSystem.freeSeeds.get(f);
+			Seed s = seedSystem.freeSeeds.get(f);
 			if (!s.collected) {
 				for (Player p : playerSystem.getActivePlayers()) {
 					float dist = (float) Point2D.distance(p.xOrig, p.yOrig, s.x, s.y);

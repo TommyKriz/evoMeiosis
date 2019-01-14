@@ -9,7 +9,7 @@ import processing.core.PApplet;
 import deepSpace.DeepSpaceConstants;
 import evoMeiosis.EvoMeiosisConstants;
 import evoMeiosis.logic.FADtriple;
-import evoMeiosis.seeds.FreeSeed;
+import evoMeiosis.seeds.Seed;
 
 public class TreeParticle {
 	int x, y;
@@ -19,7 +19,7 @@ public class TreeParticle {
 	float speed = 1;
 	TreeSystem ts;
 
-	TreeParticle(TreeSystem ts, FreeSeed s, Tree t) {
+	TreeParticle(TreeSystem ts, Seed s, Tree t) {
 		FADs = s.FADs;
 		assignedTree = t;
 		s.collected = false;

@@ -2,6 +2,7 @@ package evoMeiosis.trees;
 
 import java.util.ArrayList;
 
+import evoMeiosis.seeds.Seed;
 import processing.core.PGraphics;
 
 public class Node{
@@ -18,6 +19,9 @@ public class Node{
 	  private float forceX;
 	  private float forceY;
 	  private boolean isHighlighted;
+	  boolean isInitialized;
+	  public Seed s;
+	  int[] color;
 
 	  public Node(int id, float mass){
 	    this.id = id;
@@ -90,14 +94,17 @@ public class Node{
 	  }
 
 	  public void draw(PGraphics canvas){
-	    if(this.isHighlighted){
-	    	canvas.stroke(255, 178, 102);
-	    	canvas.fill(255, 178, 102);
-	    }else{
-	    	canvas.stroke(51, 51, 255);
-	    	canvas.fill(102, 178, 255);
-	    }
+	    	canvas.colorMode(canvas.HSB);
+	    	//canvas.stroke(, 178, 102);
+	    	canvas.fill(color[0], color[1], color[2]);
 	    canvas.ellipse(this.x, this.y, this.diameter, this.diameter);
+	    
+	    canvas.fill(color[0], color[1], color[2], 65);
+	    canvas.noStroke();
+	    canvas.ellipse(this.x, this.y, (float) (this.diameter*1.5), (float) (this.diameter*1.5));
+	    canvas.fill(color[0], color[1], color[2], 30);
+	    canvas.ellipse(this.x, this.y, (float) (this.diameter*2.5), (float) (this.diameter*2.5));
+
 
 	  }
 

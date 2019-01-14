@@ -2,19 +2,25 @@ package evoMeiosis.trees;
 
 import java.util.ArrayList;
 
+import evoMeiosis.audio.Audio;
+import evoMeiosis.seeds.SeedSystem;
 import processing.core.PGraphics;
 
 public class TreeSystemV2 {
 
-	Tree2 t;
 	
 	public ArrayList<Tree2> trees;
-
-	public TreeSystemV2(){
+	int idCounter = 0;
+	SeedSystem s;
+	Audio a;
+	
+	public TreeSystemV2(SeedSystem s, Audio a){
+		this.s = s;
+		this.a = a;
 		trees = new ArrayList<Tree2>(); 
 		
-		t = createTestTree();
-	  t.initializeNodeLocations();
+		//t = createTestTree();
+	  //t.initializeNodeLocations();
 	  
 	}
 
@@ -22,13 +28,16 @@ public class TreeSystemV2 {
 		canvas.beginDraw();
 		canvas.fill(0, 0, 0);
 		canvas.clear();
-		canvas.background(0,0,0,255);
+		canvas.background(0,0,0,0);
 	  
-		t.draw(canvas);
+		for(Tree2 t : trees) {
+			t.draw(canvas);
+		}
+		//t.draw(canvas);
 		
 	  canvas.endDraw();
 	  
-	  createTestTree();
+	  //createTestTree();
 	}
 
 	/*
@@ -53,9 +62,9 @@ public class TreeSystemV2 {
 	  if(forceDirectedGraph.isIntersectingWith(mouseX, mouseY))
 	    forceDirectedGraph.onMouseReleased();
 	}*/
-
+/*
 	Tree2 createTestTree(){
-		Tree2 t = new Tree2(400, 200);
+		//Tree2 t = new Tree2(400, 200);
 		
 		t.add(new Node(0, 1));
 		t.add(new Node(1, 6));
@@ -70,5 +79,12 @@ public class TreeSystemV2 {
 		
 	
 	  return t;
+	}*/
+
+	public void addTree(int mx, int my) {
+		a.newTreeCreated();
+		trees.add(new Tree2(mx, my, idCounter, s, a));
+		
+		idCounter++;
 	}
 }

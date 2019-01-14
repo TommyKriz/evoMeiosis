@@ -10,6 +10,7 @@ import deepSpace.DeepSpaceConstants;
 import evoMeiosis.EvoMeiosisConstants;
 import evoMeiosis.logic.Attractor;
 import evoMeiosis.logic.FADtriple;
+import evoMeiosis.player.Player;
 import processing.core.PApplet;
 
 public class Seed {
@@ -19,9 +20,6 @@ public class Seed {
 	public String uniqueID = UUID.randomUUID().toString();
 	public float timeSinceLastUpdate = 0;
 	public boolean collected = false;
-	public boolean inTree = false;
-	public boolean xIncr = false;
-	public boolean yIncr = false;
 	public float speed = 1;
 	public Attractor attr;
 	public float flyAwayTime = 1000;
@@ -36,8 +34,9 @@ public class Seed {
 	private SeedSystem s;
 
 	public ArrayList<FADtriple> FADs = new ArrayList<FADtriple>();
+	public Player collectedBy;
 	
-	Seed(SeedSystem s){
+	public Seed(SeedSystem s){
 		speed = RandomUtils.nextFloat(0.5f, 1f);
 		this.s = s;
 		initMs = System.currentTimeMillis();
@@ -180,5 +179,21 @@ public class Seed {
 			trail[i] = trail[i-1];
 		}
 		trail[0] = new int[] {x, y};
+	}
+
+	public float getEnergy() {
+		float energy = 0;
+		for(FADtriple f : FADs) {
+			energy += f.amplitude;
+		}
+		return energy;
+	}
+
+	public float getFrequency() {
+		float freq = 0;
+		for(FADtriple f : FADs) {
+			freq += f.frequency;
+		}
+		return freq/3;
 	}
 }

@@ -15,7 +15,7 @@ public class Audio {
 	boolean BGsoundSkippable;
 	boolean skippable;
 
-	void setup(PApplet parent) {
+	public void setup(PApplet parent) {
 		treeCreation = new SoundFile(parent, "treecreation_sound.wav");
 		agentSpawn = new SoundFile(parent, "agentspawn.wav");
 		BGphase1 = new SoundFile(parent, "BGStage1.aiff");
@@ -28,6 +28,7 @@ public class Audio {
 	}
 
 	public void newTreeCreated() {
+		treeCreation.amp((float) 0.1);
 		treeCreation.play();	// called as new tree creation is started in TreeSystem
 		
 		// play creation sound -> internet
@@ -38,7 +39,11 @@ public class Audio {
 	}
 
 	public void agentsSpawning(int freeSeeds) {
-		agentSpawn.play();	// called as seeds spawn in SeedSystem
+		agentSpawn.amp(0.5f);
+		if(!agentSpawn.isPlaying()) {
+			agentSpawn.play();
+		}
+			// called as seeds spawn in SeedSystem
 		if(phase == 1 && freeSeeds >= 15) {
 			phase = 2;
 			skippable = true;
@@ -62,6 +67,7 @@ public class Audio {
 	}
 
 	public void soundUpdate() {
+		
 		if(!skippable) {
 			return;
 		}

@@ -119,21 +119,21 @@ public class SeedSystem {
 		for(Seed s : freeSeeds) {
 			s.update();
 			int[] c = s.getParticleHSLcolor();
-			pgPlayerAndParticles.noStroke();
+			pgPlayerAndParticles.stroke(c[0], c[1], c[2], 100);
 			//pgPlayerAndParticles.stroke(c[0], c[1], c[2], 150);
 			
-			//pgPlayerAndParticles.fill(pgPlayerAndParticles.color(0, 0, 255, 150));
+			//pgPlayerAndParticles.fill(pgPlayerAndParticles.color(c[0], c[1], c[2], 150));
 			//pgPlayerAndParticles.ellipse(s.x, s.y, 2, 2);
-			/*
-			pgPlayerAndParticles.fill(pgPlayerAndParticles.color(c[0], c[1], c[2], 150));
-			pgPlayerAndParticles.ellipse(s.x, s.y, 4, 4);
-			pgPlayerAndParticles.fill(pgPlayerAndParticles.color(c[0], c[1], c[2], 80));
+			
+			pgPlayerAndParticles.fill(pgPlayerAndParticles.color(c[0], c[1], c[2], 100));
 			pgPlayerAndParticles.ellipse(s.x, s.y, 8, 8);
-			*/
+			//pgPlayerAndParticles.fill(pgPlayerAndParticles.color(c[0], c[1], c[2], 80));
+			//pgPlayerAndParticles.ellipse(s.x, s.y, 8, 8);
+			
 			//pgPlayerAndParticles.fill(pgPlayerAndParticles.color(c[0], c[1], c[2], 20));
 			//pgPlayerAndParticles.ellipse(s.x, s.y, 16, 16);
-			//pgPlayerAndParticles.fill(pgPlayerAndParticles.color(0, 0, 255, 20));
-			//pgPlayerAndParticles.ellipse(s.x, s.y, 18, 18);
+			//pgPlayerAndParticles.fill(pgPlayerAndParticles.color(c[0], c[1], c[2], 20));
+			////pgPlayerAndParticles.ellipse(s.x, s.y, 18, 18);
 			//pgPlayerAndParticles.fill(pgPlayerAndParticles.color(0, 0, 255, 15));
 			//pgPlayerAndParticles.ellipse(s.x, s.y, 22, 22);
 			//pgPlayerAndParticles.fill(pgPlayerAndParticles.color(0, 0, 255, 10));
@@ -141,8 +141,8 @@ public class SeedSystem {
 			//pgPlayerAndParticles.fill(pgPlayerAndParticles.color(0, 0, 255, 5));
 			//pgPlayerAndParticles.ellipse(s.x, s.y, 40, 40);
 			
-			pgPlayerAndParticles.fill(pgPlayerAndParticles.color(0, 0, 255, 20));
-			pgPlayerAndParticles.ellipse(s.x, s.y, 10, 10);
+			//pgPlayerAndParticles.fill(pgPlayerAndParticles.color(c[0], c[1], c[2], 20));
+			//pgPlayerAndParticles.ellipse(s.x, s.y, 10, 10);
 		}
 
 		

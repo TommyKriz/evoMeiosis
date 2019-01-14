@@ -23,7 +23,7 @@ public class TreeParticle {
 		FADs = s.FADs;
 		assignedTree = t;
 		s.collected = false;
-		s.inTree = true;
+		//s.inTree = true;
 		reset();
 		this.ts = ts;
 	}

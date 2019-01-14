@@ -118,8 +118,8 @@ public class PlayerSystem {
 
 		for (Player p : activePlayers) {
 			canvas.ellipse(p.xOrig, p.yOrig,
-					EvoMeiosisConstants.PLAYER_CATCH_RADIUS,
-					EvoMeiosisConstants.PLAYER_CATCH_RADIUS);
+					p.radius,
+					p.radius);
 		}
 
 		canvas.endDraw();

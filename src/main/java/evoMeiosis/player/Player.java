@@ -8,17 +8,19 @@ import evoMeiosis.seeds.FreeSeed;
 
 public class Player extends Attractor {
 
-	public int id;
+	public long id;
 
 	public ArrayList<FreeSeed> collectedSeeds;
 
-	public Player(int x, int y, int id) {
+	public Player(float x, float y, long id) {
 		super(x, y, EvoMeiosisConstants.PLAYER_CATCH_RADIUS);
 		this.id = id;
 		collectedSeeds = new ArrayList<FreeSeed>();
 	}
 
-	void update() {
+	void update(float x, float y) {
+		xOrig = x;
+		yOrig = y;
 		System.out.println(id + " : " + collectedSeeds.size());
 	}
 
@@ -27,6 +29,11 @@ public class Player extends Attractor {
 		for (FreeSeed s : collectedSeeds) {
 			s.free();
 		}
+	}
+
+	@Override
+	public String toString() {
+		return "Player #" + id + "  - x: " + xOrig + "  y: " + yOrig;
 	}
 
 }

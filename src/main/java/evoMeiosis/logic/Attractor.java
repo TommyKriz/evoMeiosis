@@ -4,10 +4,10 @@ public class Attractor {
 	public String type = "point";
 	public float intensity = 0.1f;
 	public int radius;
-	public int xOrig;
-	public int yOrig;
+	public float xOrig;
+	public float yOrig;
 
-	protected Attractor(int x, int y, int radius) {
+	protected Attractor(float x, float y, int radius) {
 		this.xOrig = x;
 		this.yOrig = y;
 		this.radius = radius;

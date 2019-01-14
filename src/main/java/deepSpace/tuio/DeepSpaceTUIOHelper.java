@@ -7,7 +7,6 @@ import processing.core.PVector;
 import TUIO.TuioCursor;
 import TUIO.TuioProcessing;
 import deepSpace.DeepSpaceConstants;
-import evoMeiosis.player.Player;
 
 public class DeepSpaceTUIOHelper {
 
@@ -16,8 +15,6 @@ public class DeepSpaceTUIOHelper {
 	private static final int INVALID = -1;
 
 	private ArrayList<PVector> playerPositions = new ArrayList<>();
-
-	ArrayList<Player> players = new ArrayList<>();
 
 	public DeepSpaceTUIOHelper(final PApplet parent) {
 		tuioClient = new TuioProcessing(parent);
@@ -43,6 +40,14 @@ public class DeepSpaceTUIOHelper {
 		return tc.getScreenY(DeepSpaceConstants.FLOOR_HEIGHT);
 	}
 
+	private long GetSessionId(int trackID) {
+		if (trackID >= tuioClient.getTuioCursorList().size()) {
+			return INVALID;
+		}
+		TuioCursor tc = tuioClient.getTuioCursorList().get(trackID);
+		return tc.getSessionID();
+	}
+
 	public ArrayList<PVector> getPlayerPositions() {
 		playerPositions.clear();
 		for (int trackID = 0; trackID < GetNumTracks(); trackID++) {
@@ -51,11 +56,12 @@ public class DeepSpaceTUIOHelper {
 		return playerPositions;
 	}
 
-	public ArrayList<Player> getPlayers() {
-		players.clear();
+	public long[] getPlayerIDs() {
+		long[] ids = new long[GetNumTracks()];
 		for (int trackID = 0; trackID < GetNumTracks(); trackID++) {
-			players.add(new Player(GetX(trackID), GetY(trackID), trackID));
+			ids[trackID] = GetSessionId(trackID);
 		}
-		return players;
+		return ids;
 	}
+
 }
